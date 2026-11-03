@@ -15,9 +15,4 @@ return new class extends Migration
             $table->string('telephone');
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('acheteurs');
-    }
 };

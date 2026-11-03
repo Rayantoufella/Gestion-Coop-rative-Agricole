@@ -17,9 +17,4 @@ return new class extends Migration
             $table->date('date_paiement');
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('cotisations');
-    }
 };

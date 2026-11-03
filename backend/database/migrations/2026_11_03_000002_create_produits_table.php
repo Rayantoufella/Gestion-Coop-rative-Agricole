@@ -16,9 +16,4 @@ return new class extends Migration
             $table->string('unite');
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('produits');
-    }
 };

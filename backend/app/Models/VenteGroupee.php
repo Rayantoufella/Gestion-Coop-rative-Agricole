@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VenteGroupee extends Model
 {
+    use HasFactory;
+
     // Nom exact de la table.
     protected $table = 'ventes_groupees';
 

@@ -18,9 +18,4 @@ return new class extends Migration
             $table->decimal('prix_unitaire', 10, 2);
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('ventes_groupees');
-    }
 };

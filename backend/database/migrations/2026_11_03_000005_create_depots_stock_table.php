@@ -17,9 +17,4 @@ return new class extends Migration
             $table->decimal('quantite', 10, 2);
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('depots_stock');
-    }
 };
