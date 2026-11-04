@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Membre extends Model
 {
+    use HasFactory;
+
     // Pas de colonnes created_at et updated_at.
     public $timestamps = false;
 

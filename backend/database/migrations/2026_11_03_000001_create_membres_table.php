@@ -19,9 +19,4 @@ return new class extends Migration
             $table->string('statut');
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('membres');
-    }
 };

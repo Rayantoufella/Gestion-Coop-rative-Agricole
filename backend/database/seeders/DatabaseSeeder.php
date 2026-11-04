@@ -21,5 +21,15 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Créer les données de test des 6 tables.
+        $this->call([
+            MembreSeeder::class,
+            ProduitSeeder::class,
+            AcheteurSeeder::class,
+            CotisationSeeder::class,
+            DepotStockSeeder::class,
+            VenteGroupeeSeeder::class,
+        ]);
     }
 }
