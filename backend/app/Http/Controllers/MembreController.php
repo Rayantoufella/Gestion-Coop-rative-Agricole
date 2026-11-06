@@ -6,6 +6,7 @@ use App\Http\Requests\StoreMembreRequest;
 use App\Http\Requests\UpdateMembreRequest;
 use App\Http\Resources\MembreResource;
 use App\Models\Membre;
+use Illuminate\Support\Facades\Gate;
 
 class MembreController extends Controller
 {
@@ -15,6 +16,8 @@ class MembreController extends Controller
     public function index()
     {
         //
+        Gate::authorize('viewAny', Membre::class);
+
         return MembreResource::collection(Membre::orderBy('nom')->paginate(10));
     }
 
@@ -24,6 +27,7 @@ class MembreController extends Controller
     public function store(StoreMembreRequest $request)
     {
         //
+        Gate::authorize('create', Membre::class);
         $membre = Membre::create($request->validated());
 
         return (new MembreResource($membre))->response()->setStatusCode(201);
@@ -35,6 +39,8 @@ class MembreController extends Controller
     public function show(Membre $membre)
     {
         //
+        Gate::authorize('view', $membre);
+
         return new MembreResource($membre);
     }
 
@@ -44,6 +50,7 @@ class MembreController extends Controller
     public function update(UpdateMembreRequest $request, Membre $membre)
     {
         //
+        Gate::authorize('update', $membre);
         $membre->update($request->validated());
 
         return new MembreResource($membre);
@@ -56,6 +63,7 @@ class MembreController extends Controller
     public function destroy(Membre $membre)
     {
         //
+        Gate::authorize('delete', $membre);
         if ($membre->cotisations()->exists() || $membre->depotsStock()->exists()) {
             return response()->json([
                 'message' => 'Impossible de supprimer le membre car il a des cotisations ou des dépôts de stock associés.',
