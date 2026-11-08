@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcheteurController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CotisationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepotStockController;
 use App\Http\Controllers\MembreController;
 use App\Http\Controllers\ProduitController;
@@ -22,4 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ventes-groupees', VenteGroupeeController::class)
         ->only(['index', 'store', 'show', 'destroy'])
         ->parameters(['ventes-groupees' => 'venteGroupee']);
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware('role:admin,gestionnaire');
 });
