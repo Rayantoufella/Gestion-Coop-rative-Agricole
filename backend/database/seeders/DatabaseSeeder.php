@@ -31,5 +31,9 @@ class DatabaseSeeder extends Seeder
             DepotStockSeeder::class,
             VenteGroupeeSeeder::class,
         ]);
+
+        $this->call([
+            UserSeeder::class,
+        ]);
     }
 }
