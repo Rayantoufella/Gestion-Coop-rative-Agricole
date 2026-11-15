@@ -1,121 +1,238 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import RouteProtegee from './components/RouteProtegee'
+import Layout from './components/Layout'
+import Connexion from './pages/Connexion'
+import Accueil from './pages/Accueil'
+import ListeMembres from './pages/membres/ListeMembres'
+import FormulaireMembre from './pages/membres/FormulaireMembre'
+import ListeCotisations from './pages/cotisations/ListeCotisations'
+import FormulaireCotisation from './pages/cotisations/FormulaireCotisation'
+import ListeProduits from './pages/produits/ListeProduits'
+import FormulaireProduit from './pages/produits/FormulaireProduit'
+import ListeDepots from './pages/depots/ListeDepots'
+import FormulaireDepot from './pages/depots/FormulaireDepot'
+import Stock from './pages/stock/Stock'
+import ListeAcheteurs from './pages/acheteurs/ListeAcheteurs'
+import FormulaireAcheteur from './pages/acheteurs/FormulaireAcheteur'
+import ListeVentes from './pages/ventes/ListeVentes'
+import FormulaireVente from './pages/ventes/FormulaireVente'
 
+// Composant principal : déclare toutes les routes (adresses) de l'application.
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/connexion" element={<Connexion />} />
 
-      <div className="ticks"></div>
+          <Route
+            path="/"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <Accueil />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {/* Membres : la liste pour les deux rôles, l'ajout et la modification pour l'admin */}
+          <Route
+            path="/membres"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeMembres />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/membres/nouveau"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireMembre />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/membres/:id/modifier"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireMembre />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          {/* Cotisations : la liste pour les connectés, l'ajout et la modification pour l'admin */}
+          <Route
+            path="/cotisations"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeCotisations />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/cotisations/nouvelle"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireCotisation />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/cotisations/:id/modifier"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireCotisation />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+
+          {/* Produits : liste, ajout et modification pour les deux rôles (comme le backend) */}
+          <Route
+            path="/produits"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeProduits />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/produits/nouveau"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <FormulaireProduit />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/produits/:id/modifier"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <FormulaireProduit />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+
+          {/* Pages du gestionnaire */}
+          {/* Dépôts : liste, ajout et modification pour les deux rôles (comme le backend) */}
+          <Route
+            path="/depots"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeDepots />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/depots/nouveau"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <FormulaireDepot />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/depots/:id/modifier"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <FormulaireDepot />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/stock"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <Stock />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          {/* Acheteurs : la liste pour les connectés, l'ajout et la modification pour le gestionnaire */}
+          <Route
+            path="/acheteurs"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeAcheteurs />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/acheteurs/nouveau"
+            element={
+              <RouteProtegee role="gestionnaire">
+                <Layout>
+                  <FormulaireAcheteur />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/acheteurs/:id/modifier"
+            element={
+              <RouteProtegee role="gestionnaire">
+                <Layout>
+                  <FormulaireAcheteur />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          {/* Ventes : la liste pour les connectés, l'ajout pour le gestionnaire (pas de modification) */}
+          <Route
+            path="/ventes"
+            element={
+              <RouteProtegee>
+                <Layout>
+                  <ListeVentes />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/ventes/nouvelle"
+            element={
+              <RouteProtegee role="gestionnaire">
+                <Layout>
+                  <FormulaireVente />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+
+          {/* Adresse inconnue : retour à l'accueil */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
