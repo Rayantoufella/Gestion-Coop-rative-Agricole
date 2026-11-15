@@ -12,7 +12,7 @@ class MembrePolicy
      */
     private function estAdmin(User $user): bool
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'gestionnaire']);
     }
 
     /**
