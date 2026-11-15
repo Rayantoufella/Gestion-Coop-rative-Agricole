@@ -1,111 +1,1214 @@
+/* Polices du prototype, chargées depuis Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap');
+
+/* =========================================================
+   1. Variables (couleurs reprises du prototype)
+   ========================================================= */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --fond: #f1f3ea;
+  --surface: #ffffff;
+  --champ: #fbfcf8;
+  --texte: #1e2b20;
+  --texte-doux: #56614f;
+  --ligne: #dce0d2;
+  --ligne-forte: #b9c0ac;
+  --survol: #f5f6ef;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --barre: #1e2b20;
+  --barre-texte: #ecebdd;
+  --barre-texte-doux: #b3b9a8;
+  --barre-survol: rgba(236, 235, 221, 0.08);
+  --barre-actif: rgba(240, 183, 58, 0.16);
+  --barre-separateur: rgba(236, 235, 221, 0.12);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --accent: #e2a422;
+  --accent-survol: #d3961a;
+  --sur-accent: #1e2b20;
+  --indigo: #2d4a7a;
+  --alerte: #a8442a;
+  --alerte-doux: #f6e5de;
+  --ok: #3f6b35;
+  --ok-doux: #e5ecd9;
+  --inactif-doux: #eceee5;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* Couleurs des silos */
+  --grain: #e8ae2e;
+  --grain-fonce: #c4861a;
+  --argile: #c0603f;
+  --argile-fonce: #a8442a;
+  --silo-toit: #c9cebd;
+  --silo-mur: #e2e5d8;
+  --silo-rainure: #d2d6c6;
+  --silo-echelle: #9aa28e;
+
+  --ombre: 0 24px 60px -28px rgba(30, 43, 32, 0.35);
+  --ciel: radial-gradient(120% 75% at 78% 105%, #f6cf86 0%, #f4dfb4 32%, #f1f3ea 68%, #e4eaee 100%);
+
+  --police-texte: 'Figtree', system-ui, sans-serif;
+  --police-titre: 'Bricolage Grotesque', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* =========================================================
+   2. Base
+   ========================================================= */
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: var(--police-texte);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+input,
+select,
+button {
+  font: inherit;
+  color: inherit;
 }
 
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--police-titre);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
 }
+
 h2 {
   font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-weight: 600;
+  line-height: 1.2;
 }
+
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+a {
+  color: var(--indigo);
 }
 
-code {
+:focus-visible {
+  outline: 3px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+.texte-doux {
+  color: var(--texte-doux);
+}
+
+.texte-gras {
+  font-weight: 600;
+}
+
+/* Les icônes ne doivent pas rétrécir dans un flex */
+.icone {
+  flex: none;
+}
+
+/* =========================================================
+   3. Logo
+   ========================================================= */
+.logo {
+  flex: none;
+  width: 46px;
+  height: auto;
+}
+
+.logo-grain {
+  fill: var(--accent);
+}
+
+.logo-bloc {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-nom {
+  font-family: var(--police-titre);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
+}
+
+/* =========================================================
+   4. Boutons
+   ========================================================= */
+
+/* Bouton principal (jaune) */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--sur-accent);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bouton:hover {
+  background: var(--accent-survol);
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Bouton secondaire (blanc avec bordure) */
+.bouton-secondaire {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--ligne-forte);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--texte);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bouton-secondaire:hover {
+  background: var(--survol);
+}
+
+/* Bouton carré qui contient seulement une icône */
+.bouton-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--indigo);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bouton-icone:hover {
+  background: var(--survol);
+}
+
+.bouton-icone-danger {
+  color: var(--alerte);
+}
+
+.bouton-icone-danger:hover {
+  background: var(--alerte-doux);
+}
+
+.bouton-icone-gris {
+  color: var(--texte-doux);
+}
+
+/* Bouton icône avec un cadre (pagination) */
+.bouton-icone-cadre {
+  border: 1px solid var(--ligne);
+  background: var(--surface);
+  color: var(--texte);
+}
+
+.bouton-icone-cadre:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Lien souligné (ex. « Voir le détail du stock ») */
+.lien-souligne {
+  color: var(--indigo);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+/* =========================================================
+   5. Messages
+   ========================================================= */
+.message-erreur {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--alerte-doux);
+  color: var(--alerte);
+  font-weight: 600;
+}
+
+.message-erreur .icone {
+  margin-top: 2px;
+}
+
+.chargement {
+  color: var(--texte-doux);
+}
+
+/* =========================================================
+   6. Page de connexion
+   ========================================================= */
+.connexion-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 48px 6vw;
+  overflow: hidden;
+  background: var(--ciel);
+}
+
+/* Décor animé (silos + tapis roulant) derrière le formulaire */
+.fond-connexion {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Bande du sol en bas de l'écran (10 % de la hauteur) */
+.sol {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10%;
+  border-top: 1.5px solid rgba(30, 43, 32, 0.55);
+  background: rgba(30, 43, 32, 0.08);
+}
+
+/* La scène est à droite du formulaire, posée sur le sol */
+.scene-silos {
+  position: absolute;
+  left: calc(6vw + 470px);
+  bottom: 10%;
+  /* largeur = tout l'écran moins la place du formulaire (à gauche) et 30px de marge (à droite) */
+  width: calc(100% - 6vw - 500px);
+  height: min(60vh, 500px);
+  overflow: visible;
+}
+
+.scene-trait {
+  stroke: rgba(30, 43, 32, 0.55);
+  stroke-width: 1.5;
+}
+
+.scene-anneau {
+  stroke: rgba(30, 43, 32, 0.55);
+  stroke-width: 0.75;
+}
+
+/* Tirets du tapis roulant : ils avancent quand strokeDashoffset change */
+.scene-tapis {
+  stroke-dasharray: 6 8;
+}
+
+.scene-coque {
+  fill: rgba(255, 255, 255, 0.45);
+}
+
+/* Filet de grains : une ligne en pointillés jaunes qui "descend" */
+.scene-filet {
+  stroke: var(--grain-fonce);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 5;
+}
+
+.scene-point {
+  fill: var(--grain-fonce);
+  transition: r 0.25s;
+}
+
+.scene-texte {
+  fill: var(--texte);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Sur un écran étroit, on cache la scène pour laisser la place au formulaire */
+@media (max-width: 900px) {
+  .scene-silos {
+    display: none;
+  }
+}
+
+.connexion-formulaire {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--ligne);
+  border-radius: 8px;
+  box-shadow: var(--ombre);
+}
+
+.connexion-formulaire h1 {
+  margin: 8px 0 6px;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.connexion-formulaire .message-erreur {
+  margin-bottom: 0;
+}
+
+.connexion-formulaire .bouton {
+  min-height: 52px;
+  font-size: 17px;
+}
+
+.connexion-demo {
+  color: var(--texte-doux);
   font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+}
+
+/* =========================================================
+   7. Champs de formulaire
+   ========================================================= */
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.champ label {
+  font-weight: 600;
+}
+
+.champ input,
+.champ select {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--ligne);
+  border-radius: 6px;
+  background: var(--champ);
+  color: var(--texte);
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.champ input:focus,
+.champ select:focus {
+  outline: none;
+  border-color: var(--indigo);
+}
+
+.aide-champ {
+  color: var(--texte-doux);
+  font-size: 15px;
+}
+
+.erreur-champ {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--alerte);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.erreur-champ .icone {
+  margin-top: 3px;
+}
+
+/* =========================================================
+   8. Mise en page : barre latérale + contenu
+   ========================================================= */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--fond);
+}
+
+.barre-laterale {
+  width: 256px;
+  flex: none;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 12px;
+  background: var(--barre);
+  color: var(--barre-texte);
+}
+
+.barre-laterale-entete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 22px;
+}
+
+.barre-laterale .logo {
+  width: 30px;
+}
+
+.barre-laterale .logo-nom {
+  font-size: 22px;
+}
+
+.barre-laterale-sous-titre {
+  color: var(--barre-texte-doux);
+  font-size: 14px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.menu-lien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--barre-texte);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.menu-lien:hover {
+  background: var(--barre-survol);
+}
+
+/* NavLink ajoute la classe "active" sur le lien de la page courante */
+.menu-lien.active {
+  background: var(--barre-actif);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.barre-laterale-pied {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px 0;
+  border-top: 1px solid var(--barre-separateur);
+}
+
+.utilisateur {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.utilisateur-nom {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.utilisateur-role {
+  color: var(--barre-texte-doux);
+  font-size: 14px;
+}
+
+.bouton-deconnexion {
+  color: var(--barre-texte);
+}
+
+.bouton-deconnexion:hover {
+  background: var(--barre-survol);
+}
+
+.contenu {
+  flex: 1;
+  min-width: 0;
+  max-width: 1240px;
+  padding: 44px 56px 72px;
+}
+
+/* Sur un écran étroit, la barre latérale ne garde que les icônes */
+@media (max-width: 900px) {
+  .barre-laterale {
+    width: 84px;
+  }
+
+  .barre-laterale-texte,
+  .menu-lien span,
+  .utilisateur {
+    display: none;
+  }
+
+  .barre-laterale-entete,
+  .menu-lien,
+  .barre-laterale-pied {
+    justify-content: center;
+  }
+
+  .contenu {
+    padding: 32px 28px 64px;
+  }
+}
+
+/* =========================================================
+   9. En-tête des pages
+   ========================================================= */
+.page-entete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.page-entete h1 {
+  margin-bottom: 8px;
+}
+
+.page-intro {
+  max-width: 60ch;
+  color: var(--texte-doux);
+}
+
+/* Petite ligne au-dessus du titre (date du jour) */
+.page-surtitre {
+  margin-bottom: 6px;
+  color: var(--texte-doux);
+}
+
+/* "dimanche" devient "Dimanche" */
+.page-surtitre::first-letter {
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   10. Tableaux (listes)
+   ========================================================= */
+.cadre-tableau {
+  background: var(--surface);
+  border: 1px solid var(--ligne);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Permet de faire défiler le tableau sur petit écran */
+.boite-tableau {
+  overflow-x: auto;
+}
+
+.tableau {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.tableau th,
+.tableau td {
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--ligne);
+  text-align: left;
+}
+
+.tableau th {
+  height: 50px;
+  color: var(--texte-doux);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.tableau td {
+  height: 56px;
+}
+
+.tableau th:first-child,
+.tableau td:first-child {
+  padding-left: 20px;
+}
+
+.tableau tbody tr {
+  transition: background-color 0.2s;
+}
+
+.tableau tbody tr:hover {
+  background: var(--survol);
+}
+
+.tableau .colonne-nombre {
+  text-align: right;
+}
+
+.tableau .colonne-actions {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Variante sans cadre, avec un trait noir en haut (accueil) */
+.tableau-simple {
+  border-top: 2px solid var(--texte);
+}
+
+.tableau-simple th:first-child,
+.tableau-simple td:first-child {
+  padding-left: 4px;
+}
+
+.tableau-simple tbody tr:hover {
+  background: transparent;
+}
+
+/* Pagination en bas du tableau */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 20px;
+}
+
+.pagination-boutons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-texte {
+  min-width: 96px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Liste vide */
+.liste-vide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 560px;
+  padding: 64px 32px;
+}
+
+.liste-vide-rond {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--fond);
+  color: var(--texte-doux);
+}
+
+.liste-vide-message {
+  font-family: var(--police-titre);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Badge de statut avec un point de couleur */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.badge-point {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-actif {
+  background: var(--ok-doux);
+  color: var(--ok);
+}
+
+.badge-inactif {
+  background: var(--inactif-doux);
+  color: var(--texte-doux);
+}
+
+/* =========================================================
+   11. Formulaires en forme de fenêtre
+   ========================================================= */
+.fenetre {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 10px;
+  box-shadow: var(--ombre);
+}
+
+/* Fenêtre plus large pour la vente (avec le silo à droite) */
+.fenetre-large {
+  max-width: 760px;
+}
+
+.fenetre-entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 26px 28px 0 32px;
+}
+
+.fenetre-entete h2 {
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.fenetre-corps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 22px 32px 8px;
+}
+
+.fenetre-champs {
+  flex: 1 1 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.fenetre-champs .message-erreur {
+  margin-bottom: 0;
+}
+
+.fenetre-pied {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 32px 28px;
+}
+
+/* Bloc stock + montant total du formulaire de vente */
+.vente-resume {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ligne);
+}
+
+.montant-total {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.montant-total-valeur {
+  font-family: var(--police-titre);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   12. Silos (accueil, stock, vente)
+   ========================================================= */
+.silo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.silo-dessin {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.silo-toit {
+  fill: var(--silo-toit);
+}
+
+.silo-mur {
+  fill: var(--silo-mur);
+}
+
+.silo-rainure {
+  stroke: var(--silo-rainure);
+  stroke-width: 1;
+}
+
+.silo-echelle {
+  stroke: var(--silo-echelle);
+  stroke-width: 1.5;
+}
+
+.silo-socle {
+  fill: var(--texte);
+}
+
+/* Couleurs du dégradé du grain (balises <stop> du SVG) */
+.silo-grain-clair {
+  stop-color: var(--grain);
+}
+
+.silo-grain-fonce {
+  stop-color: var(--grain-fonce);
+}
+
+.silo-argile-clair {
+  stop-color: var(--argile);
+}
+
+.silo-argile-fonce {
+  stop-color: var(--argile-fonce);
+}
+
+/* Petits points blancs sur le grain */
+.silo-point {
+  fill: rgba(255, 255, 255, 0.3);
+}
+
+.silo-reflet {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 2;
+}
+
+.silo-nom {
+  font-family: var(--police-titre);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.silo-valeur {
+  font-family: var(--police-titre);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.silo-note {
+  color: var(--texte-doux);
+  font-size: 15px;
+}
+
+.silo-faible {
+  color: var(--alerte);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Taille des silos selon l'endroit où ils sont affichés */
+.silo-accueil {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 150px;
+  height: 330px;
+}
+
+.silo-stock {
+  width: 100%;
+  max-width: 190px;
+  height: 400px;
+}
+
+.silo-vente {
+  width: 140px;
+  flex: none;
+  height: 320px;
+}
+
+/* =========================================================
+   13. Tableau de bord
+   ========================================================= */
+.raccourcis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.accueil {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  /* 32px (marge de l'en-tête) + 24px = 56px, comme dans le prototype */
+  margin-top: 24px;
+}
+
+.accueil-haut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 48px;
+}
+
+.accueil-silos {
+  flex: 1 1 520px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.accueil-silos-titre {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rangee-silos {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+/* Registre du mois : colonne de chiffres à droite */
+.registre {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 380px;
+  padding-left: 32px;
+  border-left: 1px solid var(--ligne);
+}
+
+.registre h2 {
+  margin-bottom: 8px;
+}
+
+/* Tampon "Novembre 2026" penché */
+.tampon {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 92px;
+  border: 2px solid var(--indigo);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--fond), inset 0 0 0 5px var(--indigo);
+  color: var(--indigo);
+  font-family: var(--police-titre);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: capitalize;
+  transform: rotate(-12deg);
+  opacity: 0.85;
+}
+
+/* Une ligne du registre (composant Carte) */
+.carte {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--ligne);
+}
+
+.carte-valeur {
+  font-family: var(--police-titre);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.carte-titre {
+  color: var(--texte-doux);
+}
+
+.accueil-ventes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================================
+   14. Page Stock
+   ========================================================= */
+.grille-stock {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 40px 36px;
+}
+
+.colonne-stock {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.detail-stock {
+  border-top: 1px solid var(--ligne);
+  font-variant-numeric: tabular-nums;
+}
+
+.ligne-stock {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  white-space: nowrap;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ligne);
+}
+
+.ligne-stock-total {
+  border-bottom: 2px solid var(--texte);
+  font-weight: 700;
+}
+
+/* =========================================================
+   15. Animations d'apparition (uniquement des "transition")
+   =========================================================
+   @starting-style donne l'état de DÉPART d'un élément quand il apparaît
+   dans la page. La "transition" l'amène ensuite à son état normal.
+   Pas de @keyframes, pas de JavaScript. */
+
+/* Chaque page apparaît en fondu, en glissant un peu vers le haut */
+.contenu > *,
+.cadre-tableau,
+.grille-stock,
+.accueil {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+@starting-style {
+  .contenu > *,
+  .cadre-tableau,
+  .grille-stock,
+  .accueil {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Les formulaires "fenêtre" apparaissent comme dans le prototype */
+.fenetre {
+  transition: opacity 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@starting-style {
+  .fenetre {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+
+/* Le grain des silos monte depuis le bas en 1,2 seconde */
+.silo-remplissage {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  transition: transform 1.2s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+@starting-style {
+  .silo-remplissage {
+    transform: scaleY(0);
+  }
+}
+
+/* Logo de la page de connexion : les traits se dessinent l'un après l'autre */
+.logo-anime .logo-trait {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.48s ease-out;
+}
+
+@starting-style {
+  .logo-anime .logo-trait {
+    stroke-dashoffset: 100;
+  }
+}
+
+.logo-anime .logo-trait:nth-child(1) {
+  transition-delay: 0.12s;
+}
+
+.logo-anime .logo-trait:nth-child(2) {
+  transition-delay: 0.28s;
+}
+
+.logo-anime .logo-trait:nth-child(3) {
+  transition-delay: 0.44s;
+}
+
+.logo-anime .logo-trait:nth-child(4) {
+  transition-delay: 0.6s;
+}
+
+.logo-anime .logo-trait:nth-child(5) {
+  transition-delay: 0.76s;
+}
+
+.logo-anime .logo-trait:nth-child(6) {
+  transition-delay: 0.92s;
+}
+
+/* Puis le grain jaune du logo apparaît */
+.logo-anime .logo-grain {
+  transition: opacity 0.5s ease 1.15s;
+}
+
+@starting-style {
+  .logo-anime .logo-grain {
+    opacity: 0;
+  }
+}
+
+/* Si l'utilisateur a demandé moins d'animations : tout s'affiche directement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
 }

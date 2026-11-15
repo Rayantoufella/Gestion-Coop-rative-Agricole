@@ -24,7 +24,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && error.config.url !== '/login') {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      window.location.href = '/login'
+      window.location.href = '/connexion'
     }
 
     return Promise.reject(error)
