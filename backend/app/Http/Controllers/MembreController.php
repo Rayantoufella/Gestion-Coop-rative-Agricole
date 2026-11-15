@@ -98,7 +98,7 @@ class MembreController extends Controller
         if ($membre->cotisations()->exists() || $membre->depotsStock()->exists()) {
             return response()->json([
                 'message' => 'Impossible de supprimer le membre car il a des cotisations ou des dépôts de stock associés.',
-            ], 400);
+            ], 409);
         }
         $membre->delete();
 
