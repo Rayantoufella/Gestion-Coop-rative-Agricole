@@ -10,18 +10,28 @@ class CotisationSeeder extends Seeder
 {
     public function run(): void
     {
-        // S'assurer qu'il existe des membres.
-        if (Membre::count() === 0) {
-            Membre::factory()->count(10)->create();
-        }
+        $membres = Membre::where('statut', 'actif')->orderBy('code_membre')->get();
 
-        $membres = Membre::pluck('id');
+        $periodes = [
+            ['periode' => now()->format('m/Y'), 'date_paiement' => now()->toDateString()],
+            ['periode' => now()->subMonth()->format('m/Y'), 'date_paiement' => now()->subMonth()->toDateString()],
+        ];
 
-        // Créer 20 cotisations.
-        for ($i = 0; $i < 20; $i++) {
-            Cotisation::factory()->create([
-                'membre_id' => $membres->random(),
-            ]);
+        $montants = [200, 300, 500];
+
+        foreach ($membres as $index => $membre) {
+            foreach ($periodes as $periodIndex => $periode) {
+                Cotisation::updateOrCreate(
+                    [
+                        'membre_id' => $membre->id,
+                        'periode' => $periode['periode'],
+                    ],
+                    [
+                        'montant' => $montants[($index + $periodIndex) % count($montants)],
+                        'date_paiement' => $periode['date_paiement'],
+                    ]
+                );
+            }
         }
     }
 }
