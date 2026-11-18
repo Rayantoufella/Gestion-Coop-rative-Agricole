@@ -9,6 +9,11 @@ const menuAdmin = [
   { chemin: '/', libelle: 'Tableau de bord', icone: 'tableau' },
   { chemin: '/membres', libelle: 'Membres', icone: 'membres' },
   { chemin: '/cotisations', libelle: 'Cotisations', icone: 'cotisations' },
+  { chemin: '/produits', libelle: 'Produits', icone: 'produits' },
+  { chemin: '/depots', libelle: 'Dépôts de stock', icone: 'depots' },
+  { chemin: '/stock', libelle: 'Stock', icone: 'stock' },
+  { chemin: '/acheteurs', libelle: 'Acheteurs', icone: 'acheteurs' },
+  { chemin: '/ventes', libelle: 'Ventes groupées', icone: 'ventes' },
 ]
 
 // Menu du gestionnaire.
