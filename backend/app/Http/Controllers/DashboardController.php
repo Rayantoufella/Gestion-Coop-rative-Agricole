@@ -7,8 +7,22 @@ use App\Models\Membre;
 use App\Models\Produit;
 use App\Models\VenteGroupee;
 
+/**
+ * Contrôleur du tableau de bord.
+ *
+ * Fournit les statistiques agrégées de l'application.
+ */
 class DashboardController extends Controller
 {
+    /**
+     * Afficher les statistiques du tableau de bord.
+     *
+     * Retourne les membres (total et actifs), les cotisations du mois
+     * (nombre et montant), les ventes du mois (nombre et chiffre d'affaires),
+     * le stock disponible par produit et les cinq dernières ventes.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     // GET /api/dashboard
     public function index()
     {

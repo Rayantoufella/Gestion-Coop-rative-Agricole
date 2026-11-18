@@ -5,10 +5,17 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Requête de création d'une cotisation pour un membre.
+ */
 class StoreCotisationRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Déterminer si l'utilisateur est autorisé à effectuer cette requête.
+     *
+     * Seul le rôle admin est autorisé.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -16,7 +23,12 @@ class StoreCotisationRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Règles de validation pour la création d'une cotisation.
+     *
+     * - membre_id : obligatoire, doit exister dans la table membres.
+     * - periode : obligatoire, chaîne de caractères, 255 caractères maximum.
+     * - montant : obligatoire, numérique, supérieur ou égal à 0.
+     * - date_paiement : obligatoire, date valide.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */

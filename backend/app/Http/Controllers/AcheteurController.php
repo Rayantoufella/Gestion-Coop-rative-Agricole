@@ -8,10 +8,19 @@ use App\Http\Resources\AcheteurResource;
 use App\Models\Acheteur;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Contrôleur de gestion des acheteurs.
+ *
+ * Gère les opérations CRUD sur les acheteurs enregistrés pour les ventes groupées.
+ */
 class AcheteurController extends Controller
 {
     /**
-     * Afficher la liste des acheteurs.
+     * Afficher la liste paginée des acheteurs.
+     *
+     * Vérifie l'autorisation via Gate::authorize('viewAny', Acheteur::class).
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
@@ -23,7 +32,12 @@ class AcheteurController extends Controller
     }
 
     /**
-     * Créer un acheteur.
+     * Créer un nouvel acheteur.
+     *
+     * Vérifie l'autorisation via Gate::authorize('create', Acheteur::class).
+     *
+     * @param  \App\Http\Requests\StoreAcheteurRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreAcheteurRequest $request)
     {
@@ -36,6 +50,11 @@ class AcheteurController extends Controller
 
     /**
      * Afficher un acheteur.
+     *
+     * Vérifie l'autorisation via Gate::authorize('view', $acheteur).
+     *
+     * @param  \App\Models\Acheteur  $acheteur
+     * @return \App\Http\Resources\AcheteurResource
      */
     public function show(Acheteur $acheteur)
     {
@@ -46,6 +65,12 @@ class AcheteurController extends Controller
 
     /**
      * Modifier un acheteur.
+     *
+     * Vérifie l'autorisation via Gate::authorize('update', $acheteur).
+     *
+     * @param  \App\Http\Requests\UpdateAcheteurRequest  $request
+     * @param  \App\Models\Acheteur  $acheteur
+     * @return \App\Http\Resources\AcheteurResource
      */
     public function update(UpdateAcheteurRequest $request, Acheteur $acheteur)
     {
@@ -58,6 +83,12 @@ class AcheteurController extends Controller
 
     /**
      * Supprimer un acheteur.
+     *
+     * Vérifie l'autorisation via Gate::authorize('delete', $acheteur).
+     * Retourne une réponse 409 si l'acheteur possède des ventes groupées.
+     *
+     * @param  \App\Models\Acheteur  $acheteur
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Acheteur $acheteur)
     {

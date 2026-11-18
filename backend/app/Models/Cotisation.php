@@ -6,6 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Modèle représentant la cotisation d'un membre pour une période donnée.
+ *
+ * Champs principaux :
+ * - id : identifiant unique de la cotisation.
+ * - membre_id : identifiant du membre ayant payé la cotisation.
+ * - periode : période couverte par la cotisation.
+ * - montant : montant versé.
+ * - date_paiement : date du paiement.
+ *
+ * @property int $id
+ * @property int $membre_id
+ * @property string $periode
+ * @property string $montant
+ * @property \Illuminate\Support\Carbon $date_paiement
+ */
 class Cotisation extends Model
 {
     use HasFactory;
@@ -25,6 +41,11 @@ class Cotisation extends Model
         'date_paiement' => 'date',
     ];
 
+    /**
+     * Membre auquel appartient la cotisation.
+     *
+     * @return BelongsTo
+     */
     // Une cotisation appartient à un membre.
     public function membre(): BelongsTo
     {

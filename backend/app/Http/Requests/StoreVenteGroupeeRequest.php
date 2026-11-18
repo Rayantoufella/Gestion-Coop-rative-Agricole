@@ -5,10 +5,18 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Requête de création d'une vente groupée.
+ */
 class StoreVenteGroupeeRequest extends FormRequest
 {
     /**
      * Autoriser la requête.
+     *
+     * Le droit est vérifié par la Policy (VenteGroupeePolicy), qui autorise
+     * les rôles admin et gestionnaire.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -17,7 +25,13 @@ class StoreVenteGroupeeRequest extends FormRequest
     }
 
     /**
-     * Règles de validation.
+     * Règles de validation pour la création d'une vente groupée.
+     *
+     * - produit_id : obligatoire, doit exister dans la table produits.
+     * - acheteur_id : obligatoire, doit exister dans la table acheteurs.
+     * - date_vente : obligatoire, date valide.
+     * - quantite : obligatoire, numérique, supérieure ou égale à 0,01.
+     * - prix_unitaire : obligatoire, numérique, supérieur ou égal à 0,01.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */

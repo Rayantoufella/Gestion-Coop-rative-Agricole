@@ -5,10 +5,17 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Requête de modification d'une cotisation existante.
+ */
 class UpdateCotisationRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Déterminer si l'utilisateur est autorisé à effectuer cette requête.
+     *
+     * Seul le rôle admin est autorisé.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -16,7 +23,13 @@ class UpdateCotisationRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Règles de validation pour la modification d'une cotisation.
+     *
+     * Tous les champs sont facultatifs (sometimes) :
+     * - membre_id : doit exister dans la table membres.
+     * - periode : chaîne de caractères, 255 caractères maximum.
+     * - montant : numérique, supérieur ou égal à 0.
+     * - date_paiement : date valide.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */

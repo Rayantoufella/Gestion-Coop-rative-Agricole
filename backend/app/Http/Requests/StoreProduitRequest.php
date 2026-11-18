@@ -5,10 +5,18 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Requête de création d'un produit.
+ */
 class StoreProduitRequest extends FormRequest
 {
     /**
      * Autoriser la requête.
+     *
+     * Le droit est vérifié par la Policy (ProduitPolicy), qui autorise
+     * les rôles admin et gestionnaire.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -17,7 +25,11 @@ class StoreProduitRequest extends FormRequest
     }
 
     /**
-     * Règles de validation.
+     * Règles de validation pour la création d'un produit.
+     *
+     * - nom : obligatoire, chaîne de caractères, 255 caractères maximum.
+     * - categorie : obligatoire, chaîne de caractères, 100 caractères maximum.
+     * - unite : obligatoire, chaîne de caractères, 20 caractères maximum.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
