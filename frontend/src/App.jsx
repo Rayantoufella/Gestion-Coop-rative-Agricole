@@ -17,6 +17,8 @@ import ListeAcheteurs from './pages/acheteurs/ListeAcheteurs'
 import FormulaireAcheteur from './pages/acheteurs/FormulaireAcheteur'
 import ListeVentes from './pages/ventes/ListeVentes'
 import FormulaireVente from './pages/ventes/FormulaireVente'
+import ListeComptes from './pages/parametres/ListeComptes'
+import FormulaireGestionnaire from './pages/parametres/FormulaireGestionnaire'
 
 // Composant principal : déclare toutes les routes (adresses) de l'application.
 function App() {
@@ -229,6 +231,28 @@ function App() {
           />
 
           {/* Adresse inconnue : retour à l'accueil */}
+          {/* Paramètres : comptes et création d'un gestionnaire, réservés à l'admin */}
+          <Route
+            path="/parametres/comptes"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <ListeComptes />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/parametres/comptes/nouveau"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireGestionnaire />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

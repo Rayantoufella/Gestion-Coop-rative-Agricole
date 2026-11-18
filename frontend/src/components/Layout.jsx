@@ -68,6 +68,18 @@ function Layout({ children }) {
               <span>{element.libelle}</span>
             </NavLink>
           ))}
+
+          {/* Section Paramètres : seulement pour l'administrateur */}
+          {utilisateur.role === 'admin' && (
+            <div className="menu-section">
+              <p className="menu-titre">Paramètres</p>
+              {/* Pas de "end" ici : le lien reste actif aussi sur /parametres/comptes/nouveau */}
+              <NavLink to="/parametres/comptes" className="menu-lien" title="Comptes">
+                <Icone nom="parametres" />
+                <span>Comptes</span>
+              </NavLink>
+            </div>
+          )}
         </nav>
 
         <div className="barre-laterale-pied">
