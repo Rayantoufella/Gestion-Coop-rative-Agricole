@@ -133,4 +133,158 @@ class UtilisateurTest extends TestCase
         $response->assertJsonPath('data.2.name', 'C absent');
         $response->assertJsonPath('data.2.en_ligne', false);
     }
+
+    public function test_admin_peut_afficher_un_gestionnaire(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $gestionnaire = User::factory()->create([
+            'role' => 'gestionnaire',
+            'email' => 'gestionnaire@gca.test',
+        ]);
+
+        $response = $this->actingAs($admin)->getJson("/api/utilisateurs/{$gestionnaire->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.email', 'gestionnaire@gca.test');
+        $response->assertJsonMissingPath('data.password');
+    }
+
+    public function test_admin_peut_modifier_un_gestionnaire(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $gestionnaire = User::factory()->create([
+            'role' => 'gestionnaire',
+            'name' => 'Ancien Nom',
+            'email' => 'ancien@gca.test',
+        ]);
+
+        $response = $this->actingAs($admin)->putJson("/api/utilisateurs/{$gestionnaire->id}", [
+            'name' => 'Nouveau Nom',
+            'email' => 'nouveau@gca.test',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.name', 'Nouveau Nom');
+        $response->assertJsonPath('data.email', 'nouveau@gca.test');
+        $response->assertJsonPath('data.role', 'gestionnaire');
+
+        $gestionnaire->refresh();
+        $this->assertSame('Nouveau Nom', $gestionnaire->name);
+        $this->assertSame('nouveau@gca.test', $gestionnaire->email);
+        $this->assertSame('gestionnaire', $gestionnaire->role);
+    }
+
+    public function test_mot_de_passe_est_optionnel_lors_d_une_modification(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $gestionnaire = User::factory()->create([
+            'role' => 'gestionnaire',
+            'email' => 'gestionnaire@gca.test',
+        ]);
+        $motDePasse = $gestionnaire->password;
+
+        $response = $this->actingAs($admin)->putJson("/api/utilisateurs/{$gestionnaire->id}", [
+            'name' => 'Nom Modifié',
+            'email' => 'gestionnaire@gca.test',
+            'password' => '',
+            'password_confirmation' => '',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertSame($motDePasse, $gestionnaire->fresh()->password);
+    }
+
+    public function test_modifier_le_mot_de_passe_revoque_les_sessions(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $gestionnaire = User::factory()->create(['role' => 'gestionnaire']);
+        $gestionnaire->createToken('api_token');
+
+        $response = $this->actingAs($admin)->putJson("/api/utilisateurs/{$gestionnaire->id}", [
+            'name' => $gestionnaire->name,
+            'email' => $gestionnaire->email,
+            'password' => 'nouveaupass',
+            'password_confirmation' => 'nouveaupass',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertTrue(Hash::check('nouveaupass', $gestionnaire->fresh()->password));
+        $this->assertSame(0, $gestionnaire->tokens()->count());
+    }
+
+    public function test_modification_refusee_si_email_deja_utilise(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        User::factory()->create(['email' => 'deja@gca.test']);
+        $gestionnaire = User::factory()->create(['role' => 'gestionnaire']);
+
+        $response = $this->actingAs($admin)->putJson("/api/utilisateurs/{$gestionnaire->id}", [
+            'name' => $gestionnaire->name,
+            'email' => 'deja@gca.test',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('email');
+    }
+
+    public function test_gestionnaire_ne_peut_pas_modifier_un_compte(): void
+    {
+        $gestionnaire = User::factory()->create(['role' => 'gestionnaire']);
+        $cible = User::factory()->create(['role' => 'gestionnaire']);
+
+        $response = $this->actingAs($gestionnaire)->putJson("/api/utilisateurs/{$cible->id}", [
+            'name' => 'Modifié',
+            'email' => 'modifie@gca.test',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_ne_peut_pas_modifier_un_autre_admin(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $autreAdmin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->putJson("/api/utilisateurs/{$autreAdmin->id}", [
+            'name' => 'Modifié',
+            'email' => 'modifie@gca.test',
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_peut_supprimer_un_gestionnaire(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $gestionnaire = User::factory()->create(['role' => 'gestionnaire']);
+        $gestionnaire->createToken('api_token');
+
+        $response = $this->actingAs($admin)->deleteJson("/api/utilisateurs/{$gestionnaire->id}");
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('users', ['id' => $gestionnaire->id]);
+        $this->assertSame(0, $gestionnaire->tokens()->count());
+    }
+
+    public function test_gestionnaire_ne_peut_pas_supprimer_un_compte(): void
+    {
+        $gestionnaire = User::factory()->create(['role' => 'gestionnaire']);
+        $cible = User::factory()->create(['role' => 'gestionnaire']);
+
+        $response = $this->actingAs($gestionnaire)->deleteJson("/api/utilisateurs/{$cible->id}");
+
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('users', ['id' => $cible->id]);
+    }
+
+    public function test_admin_ne_peut_pas_supprimer_un_autre_admin(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $autreAdmin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->deleteJson("/api/utilisateurs/{$autreAdmin->id}");
+
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('users', ['id' => $autreAdmin->id]);
+    }
 }

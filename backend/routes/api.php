@@ -26,8 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->parameters(['ventes-groupees' => 'venteGroupee']);
 
     // Paramètres de l'admin : comptes utilisateurs (droits vérifiés par UserPolicy).
-    Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
-    Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
+    Route::apiResource('utilisateurs', UtilisateurController::class)
+        ->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:admin,gestionnaire');

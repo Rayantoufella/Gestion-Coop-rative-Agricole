@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getUtilisateurs } from '../../api/utilisateurs'
+import { getUtilisateurs, supprimerUtilisateur } from '../../api/utilisateurs'
 import Icone from '../../components/Icone'
 import Pagination from '../../components/Pagination'
 import MessageErreur from '../../components/MessageErreur'
@@ -24,6 +24,7 @@ function ListeComptes() {
   const [meta, setMeta] = useState(null)
   const [chargement, setChargement] = useState(true)
   const [erreur, setErreur] = useState('')
+  const [erreurSuppression, setErreurSuppression] = useState('')
 
   // À chaque changement de page, on recharge les comptes depuis l'API.
   useEffect(() => {
@@ -48,13 +49,42 @@ function ListeComptes() {
     chargerComptes()
   }, [page])
 
+  // Demande confirmation puis supprime le compte gestionnaire.
+  async function supprimer(compte) {
+    const ok = window.confirm(
+      'Le compte de ' + compte.name + ' (' + compte.email + ') sera supprimé. ' +
+        'Ses sessions seront révoquées. Cette action est définitive. Continuer ?'
+    )
+    if (!ok) {
+      return
+    }
+
+    setErreurSuppression('')
+    try {
+      await supprimerUtilisateur(compte.id)
+      const restants = comptes.filter((c) => c.id !== compte.id)
+      if (restants.length === 0 && page > 1) {
+        setPage(page - 1)
+      } else {
+        setComptes(restants)
+      }
+    } catch (e) {
+      if (e.response && e.response.status === 403) {
+        setErreurSuppression("Vous n'avez pas le droit de supprimer ce compte.")
+      } else {
+        setErreurSuppression('La suppression a échoué.')
+      }
+    }
+  }
+
   return (
     <div>
       <div className="page-entete">
         <div>
           <h1>Comptes</h1>
           <p className="page-intro">
-            Les personnes qui ont accès à l'application. « En ligne » : actif dans les 5 dernières minutes.
+            Les personnes qui ont accès à l'application. Vous pouvez modifier ou supprimer un gestionnaire.
+            « En ligne » : actif dans les 5 dernières minutes.
           </p>
         </div>
         <Link to="/parametres/comptes/nouveau" className="bouton">
@@ -62,6 +92,8 @@ function ListeComptes() {
           <span>Créer un gestionnaire</span>
         </Link>
       </div>
+
+      {erreurSuppression && <MessageErreur texte={erreurSuppression} />}
 
       {chargement && <p className="chargement">Chargement...</p>}
 
@@ -79,6 +111,7 @@ function ListeComptes() {
                   <th>Statut</th>
                   <th>Dernière activité</th>
                   <th>Créé le</th>
+                  <th className="colonne-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,6 +128,29 @@ function ListeComptes() {
                     </td>
                     <td>{compte.derniere_activite ? formaterDate(compte.derniere_activite) : 'Jamais'}</td>
                     <td>{formaterDate(compte.created_at)}</td>
+                    <td className="colonne-actions">
+                      {compte.role === 'gestionnaire' && (
+                        <>
+                          <Link
+                            to={'/parametres/comptes/' + compte.id + '/modifier'}
+                            className="bouton-icone"
+                            aria-label={'Modifier ' + compte.name}
+                            title="Modifier"
+                          >
+                            <Icone nom="modifier" taille={19} />
+                          </Link>
+                          <button
+                            type="button"
+                            className="bouton-icone bouton-icone-danger"
+                            onClick={() => supprimer(compte)}
+                            aria-label={'Supprimer ' + compte.name}
+                            title="Supprimer"
+                          >
+                            <Icone nom="supprimer" taille={19} />
+                          </button>
+                        </>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

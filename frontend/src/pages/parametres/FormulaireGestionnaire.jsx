@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { creerUtilisateur } from '../../api/utilisateurs'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { creerUtilisateur, getUtilisateur, modifierUtilisateur } from '../../api/utilisateurs'
 import Icone from '../../components/Icone'
 import ErreurChamp from '../../components/ErreurChamp'
 import MessageErreur from '../../components/MessageErreur'
 
-// Formulaire de création d'un compte gestionnaire (Paramètres > Comptes). Réservé à l'admin.
+// Formulaire pour créer ou modifier un compte gestionnaire (Paramètres > Comptes). Réservé à l'admin.
 function FormulaireGestionnaire() {
+  const { id } = useParams()
   const navigate = useNavigate()
 
   // Un seul state pour tous les champs : chaque clé = nom attendu par l'API Laravel.
@@ -18,7 +19,33 @@ function FormulaireGestionnaire() {
   })
   const [erreurs, setErreurs] = useState({})
   const [messageErreur, setMessageErreur] = useState('')
+  const [chargement, setChargement] = useState(false)
   const [envoi, setEnvoi] = useState(false)
+
+  // En modification, on charge le compte pour remplir le formulaire.
+  useEffect(() => {
+    // Demande le compte à l'API et copie ses valeurs dans le formulaire.
+    async function chargerUtilisateur() {
+      setChargement(true)
+      try {
+        const utilisateur = await getUtilisateur(id)
+        setForm({
+          name: utilisateur.name,
+          email: utilisateur.email,
+          password: '',
+          password_confirmation: '',
+        })
+      } catch (e) {
+        console.log('Erreur pendant le chargement du compte', e)
+        setMessageErreur('Impossible de charger ce compte.')
+      }
+      setChargement(false)
+    }
+
+    if (id) {
+      chargerUtilisateur()
+    }
+  }, [id])
 
   // Met à jour le champ modifié (grâce à son attribut name).
   function changerChamp(event) {
@@ -33,13 +60,21 @@ function FormulaireGestionnaire() {
     setEnvoi(true)
 
     try {
-      await creerUtilisateur(form)
+      if (id) {
+        await modifierUtilisateur(id, form)
+      } else {
+        await creerUtilisateur(form)
+      }
       navigate('/parametres/comptes')
     } catch (e) {
       if (e.response && e.response.status === 422) {
         setErreurs(e.response.data.errors)
       } else if (e.response && e.response.status === 403) {
-        setMessageErreur("Vous n'avez pas le droit de créer un compte.")
+        setMessageErreur(
+          id
+            ? "Vous n'avez pas le droit de modifier ce compte."
+            : "Vous n'avez pas le droit de créer un compte."
+        )
       } else {
         setMessageErreur("L'enregistrement a échoué.")
       }
@@ -48,11 +83,17 @@ function FormulaireGestionnaire() {
     setEnvoi(false)
   }
 
+  if (chargement) {
+    return <p className="chargement">Chargement...</p>
+  }
+
+  const texteAction = id ? 'Enregistrer les modifications' : 'Créer le gestionnaire'
+
   return (
     <div className="fenetre">
       <form onSubmit={envoyerFormulaire} noValidate>
         <div className="fenetre-entete">
-          <h2>Nouveau gestionnaire</h2>
+          <h2>{id ? 'Modifier le gestionnaire' : 'Nouveau gestionnaire'}</h2>
           <Link to="/parametres/comptes" className="bouton-icone bouton-icone-gris" aria-label="Fermer" title="Fermer">
             <Icone nom="fermer" />
           </Link>
@@ -85,7 +126,9 @@ function FormulaireGestionnaire() {
                 value={form.password}
                 onChange={changerChamp}
               />
-              <span className="aide-champ">8 caractères minimum.</span>
+              <span className="aide-champ">
+                {id ? 'Laisser vide pour conserver le mot de passe actuel.' : '8 caractères minimum.'}
+              </span>
               <ErreurChamp messages={erreurs.password} />
             </div>
 
@@ -108,7 +151,7 @@ function FormulaireGestionnaire() {
             Annuler
           </Link>
           <button type="submit" className="bouton" disabled={envoi}>
-            {envoi ? 'Enregistrement...' : 'Créer le gestionnaire'}
+            {envoi ? 'Enregistrement...' : texteAction}
           </button>
         </div>
       </form>

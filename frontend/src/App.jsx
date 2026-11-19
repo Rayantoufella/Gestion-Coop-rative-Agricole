@@ -252,6 +252,16 @@ function App() {
               </RouteProtegee>
             }
           />
+          <Route
+            path="/parametres/comptes/:id/modifier"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireGestionnaire />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
