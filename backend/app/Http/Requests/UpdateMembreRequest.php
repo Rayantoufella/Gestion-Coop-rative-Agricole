@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 /**
  * Requête de modification d'un membre existant.
@@ -16,8 +17,6 @@ class UpdateMembreRequest extends FormRequest
      *
      * Le droit est vérifié par la Policy (MembrePolicy) : la modification est
      * réservée au rôle admin.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -32,7 +31,8 @@ class UpdateMembreRequest extends FormRequest
      * - nom : obligatoire, chaîne de caractères, 255 caractères maximum.
      * - prenom : obligatoire, chaîne de caractères, 255 caractères maximum.
      * - telephone : obligatoire, chaîne de caractères, 20 caractères maximum.
-     * - date_adhesion : obligatoire, date valide.
+     * - date_adhesion : obligatoire, date valide, non postérieure à une
+     *   cotisation existante du membre.
      * - statut : obligatoire, doit valoir actif ou inactif.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
@@ -47,5 +47,32 @@ class UpdateMembreRequest extends FormRequest
             'date_adhesion' => ['required', 'date'],
             'statut' => ['required', 'in:actif,inactif'],
         ];
+    }
+
+    /**
+     * Vérifier que la nouvelle date d'adhésion reste compatible avec les
+     * cotisations déjà enregistrées pour ce membre.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            $membre = $this->route('membre');
+            $dateAdhesion = $this->date('date_adhesion');
+
+            $cotisationAnterieure = $membre->cotisations()
+                ->whereDate('date_paiement', '<', $dateAdhesion->toDateString())
+                ->exists();
+
+            if ($cotisationAnterieure) {
+                $validator->errors()->add(
+                    'date_adhesion',
+                    "La date d'adhésion ne peut pas être postérieure à une cotisation existante."
+                );
+            }
+        });
     }
 }
