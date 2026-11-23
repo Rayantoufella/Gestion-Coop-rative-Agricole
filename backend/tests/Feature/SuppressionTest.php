@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Cotisation;
 use App\Models\DepotStock;
+use App\Models\Membre;
 use App\Models\Produit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,5 +44,23 @@ class SuppressionTest extends TestCase
 
         // 3. Vérifier : le produit est supprimé
         $response->assertStatus(200);
+    }
+
+    public function test_admin_ne_peut_pas_supprimer_un_membre_avec_cotisation(): void
+    {
+        // 1. Préparer : un admin et un membre qui a une cotisation
+        $user = User::factory()->create(['role' => 'admin']);
+        $membre = Membre::factory()->create();
+        Cotisation::factory()->create([
+            'membre_id' => $membre->id,
+        ]);
+
+        // 2. Agir : demander la suppression du membre
+        $response = $this->actingAs($user)
+                         ->deleteJson("/api/membres/{$membre->id}");
+
+        // 3. Vérifier : la suppression est refusée (conflit) et le membre existe toujours
+        $response->assertStatus(409);
+        $this->assertDatabaseHas('membres', ['id' => $membre->id]);
     }
 }
