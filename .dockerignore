@@ -1,0 +1,16 @@
+# Fichiers exclus du contexte de build Docker
+.git
+.github
+Conception
+docs
+**/node_modules
+frontend/dist
+backend/vendor
+backend/.env
+frontend/.env
+backend/database/*.sqlite
+backend/storage/logs/*
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/.phpunit.result.cache
