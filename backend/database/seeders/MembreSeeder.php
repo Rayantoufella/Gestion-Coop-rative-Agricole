@@ -9,19 +9,18 @@ class MembreSeeder extends Seeder
 {
     public function run(): void
     {
+        // Données fictives : noms inventés et numéros factices (06 00 00 00 xx).
         $membres = [
-            ['code_membre' => 'GCA-2024-001', 'nom' => 'El Amrani', 'prenom' => 'Mohammed', 'telephone' => '0661234567', 'date_adhesion' => '2024-03-15', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2024-002', 'nom' => 'Bennani', 'prenom' => 'Fatima Zahra', 'telephone' => '0662345678', 'date_adhesion' => '2024-04-02', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2024-003', 'nom' => 'Ait Lahcen', 'prenom' => 'Youssef', 'telephone' => '0663456789', 'date_adhesion' => '2024-05-20', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2024-004', 'nom' => 'El Idrissi', 'prenom' => 'Khadija', 'telephone' => '0664567890', 'date_adhesion' => '2024-06-11', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2024-005', 'nom' => 'Ouazzani', 'prenom' => 'Rachid', 'telephone' => '0665678901', 'date_adhesion' => '2024-09-08', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2024-006', 'nom' => 'Tazi', 'prenom' => 'Samira', 'telephone' => '0666789012', 'date_adhesion' => '2024-11-25', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2025-007', 'nom' => 'Berrada', 'prenom' => 'Hassan', 'telephone' => '0667890123', 'date_adhesion' => '2025-01-14', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2025-008', 'nom' => 'Lahlou', 'prenom' => 'Nadia', 'telephone' => '0668901234', 'date_adhesion' => '2025-02-19', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2025-009', 'nom' => 'Chraibi', 'prenom' => 'Abdelhak', 'telephone' => '0669012345', 'date_adhesion' => '2025-03-27', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2025-010', 'nom' => 'Naciri', 'prenom' => 'Amina', 'telephone' => '0670123456', 'date_adhesion' => '2025-04-30', 'statut' => 'actif'],
-            ['code_membre' => 'GCA-2025-011', 'nom' => 'El Fassi', 'prenom' => 'Meryem', 'telephone' => '0671234567', 'date_adhesion' => '2025-06-05', 'statut' => 'inactif'],
-            ['code_membre' => 'GCA-2025-012', 'nom' => 'Bouzid', 'prenom' => 'Omar', 'telephone' => '0672345678', 'date_adhesion' => '2025-07-21', 'statut' => 'inactif'],
+            ['code_membre' => 'GCA-2025-001', 'nom' => 'Amrani', 'prenom' => 'Salma', 'telephone' => '0600000001', 'date_adhesion' => '2025-01-10', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-002', 'nom' => 'Benali', 'prenom' => 'Karim', 'telephone' => '0600000002', 'date_adhesion' => '2025-01-24', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-003', 'nom' => 'Chafik', 'prenom' => 'Hiba', 'telephone' => '0600000003', 'date_adhesion' => '2025-02-15', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-004', 'nom' => 'Daoudi', 'prenom' => 'Anas', 'telephone' => '0600000004', 'date_adhesion' => '2025-03-03', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-005', 'nom' => 'El Kadiri', 'prenom' => 'Leïla', 'telephone' => '0600000005', 'date_adhesion' => '2025-03-21', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-006', 'nom' => 'Fadili', 'prenom' => 'Mehdi', 'telephone' => '0600000006', 'date_adhesion' => '2025-04-08', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-007', 'nom' => 'Ghazi', 'prenom' => 'Sara', 'telephone' => '0600000007', 'date_adhesion' => '2025-05-12', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-008', 'nom' => 'Hamdani', 'prenom' => 'Ilyas', 'telephone' => '0600000008', 'date_adhesion' => '2025-06-02', 'statut' => 'actif'],
+            ['code_membre' => 'GCA-2025-009', 'nom' => 'Idrissi', 'prenom' => 'Rania', 'telephone' => '0600000009', 'date_adhesion' => '2025-06-19', 'statut' => 'inactif'],
+            ['code_membre' => 'GCA-2025-010', 'nom' => 'Jabri', 'prenom' => 'Yassine', 'telephone' => '0600000010', 'date_adhesion' => '2025-07-07', 'statut' => 'inactif'],
         ];
 
         foreach ($membres as $membre) {
