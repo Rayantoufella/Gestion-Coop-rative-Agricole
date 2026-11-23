@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -100,3 +101,37 @@ jobs:
 
       - name: Compiler l'application
         run: npm run build
+
+  docker:
+    name: Docker (compose)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Vérifier la configuration
+        run: docker compose config --quiet
+
+      - name: Construire les images
+        run: docker compose build
+
+      - name: Démarrer l'application
+        run: docker compose up -d --wait --wait-timeout 300
+
+      - name: Tester la connexion à l'API
+        run: |
+          curl --fail --silent --show-error -X POST http://localhost:8001/api/login \
+            -H 'Accept: application/json' -H 'Content-Type: application/json' \
+            -d '{"email":"admin@gca.test","password":"password"}' > /dev/null
+          curl --fail --silent --show-error --retry 30 --retry-delay 3 --retry-all-errors \
+            http://localhost:5174/ > /dev/null
+
+      - name: Afficher les logs en cas d'échec
+        if: failure()
+        run: docker compose logs
+
+      - name: Arrêter l'application
+        if: always()
+        run: docker compose down -v
