@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,14 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
-        // Créer les données de test des 6 tables.
+        // Données de démonstration fictives des 6 tables.
         $this->call([
             MembreSeeder::class,
             ProduitSeeder::class,
@@ -32,6 +24,7 @@ class DatabaseSeeder extends Seeder
             VenteGroupeeSeeder::class,
         ]);
 
+        // Comptes de démonstration : un administrateur et un gestionnaire.
         $this->call([
             UserSeeder::class,
         ]);
