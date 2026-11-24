@@ -10,8 +10,8 @@ import MessageErreur from '../../components/MessageErreur'
 // Page qui affiche la liste des acheteurs, page par page.
 function ListeAcheteurs() {
   const { utilisateur } = useContext(AuthContext)
-  // Dans le backend, seul le gestionnaire peut ajouter, modifier ou supprimer un acheteur.
-  const estGestionnaire = utilisateur.role === 'gestionnaire'
+  // Les deux rôles peuvent ajouter, modifier ou supprimer un acheteur.
+  const peutGerer = ['admin', 'gestionnaire'].includes(utilisateur.role)
 
   const [acheteurs, setAcheteurs] = useState([])
   const [page, setPage] = useState(1)
@@ -76,7 +76,7 @@ function ListeAcheteurs() {
           <h1>Acheteurs</h1>
           <p className="page-intro">Les clients qui achètent en gros.</p>
         </div>
-        {estGestionnaire && (
+        {peutGerer && (
           <Link to="/acheteurs/nouveau" className="bouton">
             <Icone nom="plus" taille={18} />
             <span>Ajouter un acheteur</span>
@@ -94,7 +94,7 @@ function ListeAcheteurs() {
         <div className="cadre-tableau">
           {acheteurs.length === 0 && (
             <ListeVide icone="acheteurs" message="Aucun acheteur pour l'instant.">
-              {estGestionnaire && (
+              {peutGerer && (
                 <Link to="/acheteurs/nouveau" className="bouton">
                   Ajouter un acheteur
                 </Link>
@@ -110,7 +110,7 @@ function ListeAcheteurs() {
                     <tr>
                       <th>Nom</th>
                       <th>Téléphone</th>
-                      {estGestionnaire && <th className="colonne-actions">Actions</th>}
+                      {peutGerer && <th className="colonne-actions">Actions</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -118,7 +118,7 @@ function ListeAcheteurs() {
                       <tr key={acheteur.id}>
                         <td className="texte-gras">{acheteur.nom}</td>
                         <td>{acheteur.telephone}</td>
-                        {estGestionnaire && (
+                        {peutGerer && (
                           <td className="colonne-actions">
                             <Link
                               to={'/acheteurs/' + acheteur.id + '/modifier'}

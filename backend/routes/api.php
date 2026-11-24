@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepotStockController;
 use App\Http\Controllers\MembreController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\VenteGroupeeController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ventes-groupees', VenteGroupeeController::class)
         ->only(['index', 'store', 'show', 'destroy'])
         ->parameters(['ventes-groupees' => 'venteGroupee']);
+
+    // Paramètres de l'admin : comptes utilisateurs (droits vérifiés par UserPolicy).
+    Route::apiResource('utilisateurs', UtilisateurController::class)
+        ->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:admin,gestionnaire');

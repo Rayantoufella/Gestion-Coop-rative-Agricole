@@ -8,10 +8,19 @@ use App\Http\Resources\MembreResource;
 use App\Models\Membre;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Contrôleur de gestion des membres.
+ *
+ * Gère les opérations CRUD sur les membres de l'organisation.
+ */
 class MembreController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Afficher la liste paginée des membres.
+     *
+     * Vérifie l'autorisation via Gate::authorize('viewAny', Membre::class).
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
@@ -22,7 +31,12 @@ class MembreController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistrer un nouveau membre.
+     *
+     * Vérifie l'autorisation via Gate::authorize('create', Membre::class).
+     *
+     * @param  \App\Http\Requests\StoreMembreRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreMembreRequest $request)
     {
@@ -34,7 +48,12 @@ class MembreController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Afficher un membre.
+     *
+     * Vérifie l'autorisation via Gate::authorize('view', $membre).
+     *
+     * @param  \App\Models\Membre  $membre
+     * @return \App\Http\Resources\MembreResource
      */
     public function show(Membre $membre)
     {
@@ -45,7 +64,13 @@ class MembreController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Modifier un membre.
+     *
+     * Vérifie l'autorisation via Gate::authorize('update', $membre).
+     *
+     * @param  \App\Http\Requests\UpdateMembreRequest  $request
+     * @param  \App\Models\Membre  $membre
+     * @return \App\Http\Resources\MembreResource
      */
     public function update(UpdateMembreRequest $request, Membre $membre)
     {
@@ -58,7 +83,13 @@ class MembreController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer un membre.
+     *
+     * Vérifie l'autorisation via Gate::authorize('delete', $membre).
+     * Retourne une réponse 400 si le membre possède des cotisations ou des dépôts de stock.
+     *
+     * @param  \App\Models\Membre  $membre
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Membre $membre)
     {
@@ -67,7 +98,7 @@ class MembreController extends Controller
         if ($membre->cotisations()->exists() || $membre->depotsStock()->exists()) {
             return response()->json([
                 'message' => 'Impossible de supprimer le membre car il a des cotisations ou des dépôts de stock associés.',
-            ], 400);
+            ], 409);
         }
         $membre->delete();
 

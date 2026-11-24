@@ -114,9 +114,17 @@ function Accueil() {
               <Icone nom="cotisations" taille={18} />
               <span>Enregistrer une cotisation</span>
             </Link>
-            <Link to="/membres/nouveau" className="bouton">
+            <Link to="/membres/nouveau" className="bouton-secondaire">
               <Icone nom="plus" taille={18} />
               <span>Ajouter un membre</span>
+            </Link>
+            <Link to="/depots/nouveau" className="bouton-secondaire">
+              <Icone nom="depots" taille={18} />
+              <span>Enregistrer un dépôt</span>
+            </Link>
+            <Link to="/ventes/nouvelle" className="bouton">
+              <Icone nom="plus" taille={18} />
+              <span>Nouvelle vente</span>
             </Link>
           </div>
         ) : (
@@ -144,11 +152,9 @@ function Accueil() {
             <section className="accueil-silos">
               <div className="accueil-silos-titre">
                 <h2>Stock disponible</h2>
-                {!estAdmin && (
-                  <Link to="/stock" className="lien-souligne">
-                    Voir le détail du stock
-                  </Link>
-                )}
+                <Link to="/stock" className="lien-souligne">
+                  Voir le détail du stock
+                </Link>
               </div>
               <div className="rangee-silos">
                 {statistiques.stock.slice(0, 5).map((produit) => (

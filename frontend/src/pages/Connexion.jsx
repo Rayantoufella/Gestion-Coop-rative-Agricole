@@ -95,9 +95,6 @@ function Connexion() {
           {chargement ? 'Connexion...' : 'Se connecter'}
         </button>
 
-        <p className="connexion-demo">
-          Démo : gestionnaire@gca.test ou admin@gca.test, mot de passe « password ».
-        </p>
       </form>
     </div>
   )

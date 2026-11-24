@@ -5,26 +5,47 @@ namespace App\Policies;
 use App\Models\Cotisation;
 use App\Models\User;
 
+/**
+ * Politique d'autorisation régissant les actions sur les cotisations.
+ *
+ * Toutes les actions sont réservées aux administrateurs.
+ */
 class CotisationPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Détermine si l'utilisateur peut consulter la liste des cotisations.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['admin', 'gestionnaire']);
+        return $user->role === 'admin';
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Détermine si l'utilisateur peut consulter une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @param  Cotisation  $cotisation
+     * @return bool
      */
     public function view(User $user, Cotisation $cotisation): bool
     {
-        return in_array($user->role, ['admin', 'gestionnaire']);
+        return $user->role === 'admin';
     }
 
     /**
-     * Determine whether the user can create models.
+     * Détermine si l'utilisateur peut créer une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -32,7 +53,13 @@ class CotisationPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Détermine si l'utilisateur peut modifier une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @param  Cotisation  $cotisation
+     * @return bool
      */
     public function update(User $user, Cotisation $cotisation): bool
     {
@@ -40,7 +67,13 @@ class CotisationPolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Détermine si l'utilisateur peut supprimer une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @param  Cotisation  $cotisation
+     * @return bool
      */
     public function delete(User $user, Cotisation $cotisation): bool
     {
@@ -48,7 +81,13 @@ class CotisationPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Détermine si l'utilisateur peut restaurer une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @param  Cotisation  $cotisation
+     * @return bool
      */
     public function restore(User $user, Cotisation $cotisation): bool
     {
@@ -56,7 +95,13 @@ class CotisationPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Détermine si l'utilisateur peut supprimer définitivement une cotisation.
+     *
+     * Règle : administrateur uniquement.
+     *
+     * @param  User  $user
+     * @param  Cotisation  $cotisation
+     * @return bool
      */
     public function forceDelete(User $user, Cotisation $cotisation): bool
     {

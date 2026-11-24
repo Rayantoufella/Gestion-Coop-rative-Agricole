@@ -1,0 +1,400 @@
+{
+  "info": {
+    "name": "GCA - Gestion de Coopérative Agricole",
+    "description": "Vérifications de l'API : connexion Sanctum, droits des deux rôles et contrôle du stock. Aucune requête ne modifie les données de démo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Connexion administrateur",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{motDePasse}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Connexion réussie (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Rôle admin', function () {",
+              " pm.expect(pm.response.json().user.role).to.eql('admin');",
+              "});",
+              "pm.collectionVariables.set('adminToken', pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Connexion gestionnaire",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{gestionnaireEmail}}\",\n  \"password\": \"{{motDePasse}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Connexion réussie (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Rôle gestionnaire', function () {",
+              " pm.expect(pm.response.json().user.role).to.eql('gestionnaire');",
+              "});",
+              "pm.collectionVariables.set('gestionnaireToken', pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Sans jeton : liste des membres refusée",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/membres"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Non authentifié (401)', function () {",
+              " pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Admin : liste des membres",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/membres"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Liste des membres (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Admin : liste des cotisations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/cotisations"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Liste des cotisations (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Gestionnaire : cotisations interdites",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/cotisations"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Accès interdit (403)', function () {",
+              " pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Gestionnaire : comptes interdits",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/utilisateurs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Accès interdit (403)', function () {",
+              " pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Gestionnaire : liste des produits",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/produits"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Liste des produits (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});",
+              "pm.collectionVariables.set('produitId', pm.response.json().data[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Gestionnaire : liste des acheteurs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/acheteurs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Liste des acheteurs (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});",
+              "pm.collectionVariables.set('acheteurId', pm.response.json().data[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Gestionnaire : vente supérieure au stock refusée",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ventes-groupees",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"produit_id\": \"{{produitId}}\",\n  \"acheteur_id\": \"{{acheteurId}}\",\n  \"date_vente\": \"2026-01-15\",\n  \"quantite\": 999999,\n  \"prix_unitaire\": 10\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Vente refusée (422)', function () {",
+              " pm.response.to.have.status(422);",
+              "});",
+              "pm.test('Message stock insuffisant', function () {",
+              " const json = pm.response.json();",
+              " pm.expect(json.message).to.eql('Stock insuffisant.');",
+              " pm.expect(json).to.have.property('stock_disponible');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Gestionnaire : tableau de bord",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gestionnaireToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/dashboard"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Tableau de bord (200)', function () {",
+              " pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8001/api"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@gca.test"
+    },
+    {
+      "key": "gestionnaireEmail",
+      "value": "gestionnaire@gca.test"
+    },
+    {
+      "key": "motDePasse",
+      "value": "password"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "gestionnaireToken",
+      "value": ""
+    },
+    {
+      "key": "produitId",
+      "value": ""
+    },
+    {
+      "key": "acheteurId",
+      "value": ""
+    }
+  ]
+}

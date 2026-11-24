@@ -9,7 +9,18 @@ class AcheteurSeeder extends Seeder
 {
     public function run(): void
     {
-        // Créer 10 acheteurs de test.
-        Acheteur::factory()->count(10)->create();
+        // Acheteurs fictifs : noms inventés et numéros factices (05 00 00 00 xx).
+        $acheteurs = [
+            ['nom' => 'Épicerie Al Amal', 'telephone' => '0500000001'],
+            ['nom' => "Restaurant Le Jardin d'Argan", 'telephone' => '0500000002'],
+            ['nom' => 'Grossiste Sud Primeurs', 'telephone' => '0500000003'],
+        ];
+
+        foreach ($acheteurs as $acheteur) {
+            Acheteur::updateOrCreate(
+                ['nom' => $acheteur['nom']],
+                ['telephone' => $acheteur['telephone']]
+            );
+        }
     }
 }

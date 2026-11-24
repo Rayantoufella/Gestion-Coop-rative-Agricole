@@ -6,6 +6,12 @@ import Icone from '../../components/Icone'
 import ErreurChamp from '../../components/ErreurChamp'
 import MessageErreur from '../../components/MessageErreur'
 
+// Transforme une date "AAAA-MM-JJ" en "JJ/MM/AAAA".
+function formaterDate(date) {
+  const morceaux = date.split('-')
+  return morceaux[2] + '/' + morceaux[1] + '/' + morceaux[0]
+}
+
 // Formulaire pour enregistrer une cotisation, ou la modifier s'il y a un id dans l'adresse.
 function FormulaireCotisation() {
   const { id } = useParams()
@@ -23,6 +29,8 @@ function FormulaireCotisation() {
   const [messageErreur, setMessageErreur] = useState('')
   const [chargement, setChargement] = useState(true)
   const [envoi, setEnvoi] = useState(false)
+
+  const membreSelectionne = membres.find((membre) => String(membre.id) === form.membre_id)
 
   // Au démarrage : on charge la liste des membres, et la cotisation si on modifie.
   useEffect(() => {
@@ -62,6 +70,18 @@ function FormulaireCotisation() {
     event.preventDefault()
     setErreurs({})
     setMessageErreur('')
+
+    if (
+      membreSelectionne &&
+      form.date_paiement &&
+      form.date_paiement < membreSelectionne.date_adhesion
+    ) {
+      setErreurs({
+        date_paiement: ["La date de paiement doit être supérieure ou égale à la date d'adhésion du membre."],
+      })
+      return
+    }
+
     setEnvoi(true)
 
     try {
@@ -139,7 +159,21 @@ function FormulaireCotisation() {
 
             <div className="champ">
               <label htmlFor="date_paiement">Date de paiement</label>
-              <input id="date_paiement" name="date_paiement" type="date" value={form.date_paiement} onChange={changerChamp} />
+              <input
+                id="date_paiement"
+                name="date_paiement"
+                type="date"
+                min={membreSelectionne ? membreSelectionne.date_adhesion : undefined}
+                value={form.date_paiement}
+                onChange={changerChamp}
+              />
+              <span className="aide-champ">
+                {membreSelectionne
+                  ? "Doit être supérieure ou égale à la date d'adhésion (" +
+                    formaterDate(membreSelectionne.date_adhesion) +
+                    ').'
+                  : 'Choisissez un membre pour connaître la date minimale.'}
+              </span>
               <ErreurChamp messages={erreurs.date_paiement} />
             </div>
           </div>

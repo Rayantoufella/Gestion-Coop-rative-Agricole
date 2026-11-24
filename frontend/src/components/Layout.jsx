@@ -9,6 +9,11 @@ const menuAdmin = [
   { chemin: '/', libelle: 'Tableau de bord', icone: 'tableau' },
   { chemin: '/membres', libelle: 'Membres', icone: 'membres' },
   { chemin: '/cotisations', libelle: 'Cotisations', icone: 'cotisations' },
+  { chemin: '/produits', libelle: 'Produits', icone: 'produits' },
+  { chemin: '/depots', libelle: 'Dépôts de stock', icone: 'depots' },
+  { chemin: '/stock', libelle: 'Stock', icone: 'stock' },
+  { chemin: '/acheteurs', libelle: 'Acheteurs', icone: 'acheteurs' },
+  { chemin: '/ventes', libelle: 'Ventes groupées', icone: 'ventes' },
 ]
 
 // Menu du gestionnaire.
@@ -63,6 +68,18 @@ function Layout({ children }) {
               <span>{element.libelle}</span>
             </NavLink>
           ))}
+
+          {/* Section Paramètres : seulement pour l'administrateur */}
+          {utilisateur.role === 'admin' && (
+            <div className="menu-section">
+              <p className="menu-titre">Paramètres</p>
+              {/* Pas de "end" ici : le lien reste actif aussi sur /parametres/comptes/nouveau */}
+              <NavLink to="/parametres/comptes" className="menu-lien" title="Comptes">
+                <Icone nom="parametres" />
+                <span>Comptes</span>
+              </NavLink>
+            </div>
+          )}
         </nav>
 
         <div className="barre-laterale-pied">

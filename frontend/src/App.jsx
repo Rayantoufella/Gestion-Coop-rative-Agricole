@@ -17,6 +17,8 @@ import ListeAcheteurs from './pages/acheteurs/ListeAcheteurs'
 import FormulaireAcheteur from './pages/acheteurs/FormulaireAcheteur'
 import ListeVentes from './pages/ventes/ListeVentes'
 import FormulaireVente from './pages/ventes/FormulaireVente'
+import ListeComptes from './pages/parametres/ListeComptes'
+import FormulaireGestionnaire from './pages/parametres/FormulaireGestionnaire'
 
 // Composant principal : déclare toutes les routes (adresses) de l'application.
 function App() {
@@ -69,11 +71,11 @@ function App() {
             }
           />
 
-          {/* Cotisations : la liste pour les connectés, l'ajout et la modification pour l'admin */}
+          {/* Cotisations : accès réservé à l'admin */}
           <Route
             path="/cotisations"
             element={
-              <RouteProtegee>
+              <RouteProtegee role="admin">
                 <Layout>
                   <ListeCotisations />
                 </Layout>
@@ -133,7 +135,7 @@ function App() {
             }
           />
 
-          {/* Pages du gestionnaire */}
+          {/* Pages communes aux deux rôles */}
           {/* Dépôts : liste, ajout et modification pour les deux rôles (comme le backend) */}
           <Route
             path="/depots"
@@ -175,7 +177,7 @@ function App() {
               </RouteProtegee>
             }
           />
-          {/* Acheteurs : la liste pour les connectés, l'ajout et la modification pour le gestionnaire */}
+          {/* Acheteurs : liste, ajout et modification pour les deux rôles */}
           <Route
             path="/acheteurs"
             element={
@@ -189,7 +191,7 @@ function App() {
           <Route
             path="/acheteurs/nouveau"
             element={
-              <RouteProtegee role="gestionnaire">
+              <RouteProtegee>
                 <Layout>
                   <FormulaireAcheteur />
                 </Layout>
@@ -199,14 +201,14 @@ function App() {
           <Route
             path="/acheteurs/:id/modifier"
             element={
-              <RouteProtegee role="gestionnaire">
+              <RouteProtegee>
                 <Layout>
                   <FormulaireAcheteur />
                 </Layout>
               </RouteProtegee>
             }
           />
-          {/* Ventes : la liste pour les connectés, l'ajout pour le gestionnaire (pas de modification) */}
+          {/* Ventes : liste et ajout pour les deux rôles (pas de modification) */}
           <Route
             path="/ventes"
             element={
@@ -220,7 +222,7 @@ function App() {
           <Route
             path="/ventes/nouvelle"
             element={
-              <RouteProtegee role="gestionnaire">
+              <RouteProtegee>
                 <Layout>
                   <FormulaireVente />
                 </Layout>
@@ -229,6 +231,38 @@ function App() {
           />
 
           {/* Adresse inconnue : retour à l'accueil */}
+          {/* Paramètres : comptes et création d'un gestionnaire, réservés à l'admin */}
+          <Route
+            path="/parametres/comptes"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <ListeComptes />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/parametres/comptes/nouveau"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireGestionnaire />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+          <Route
+            path="/parametres/comptes/:id/modifier"
+            element={
+              <RouteProtegee role="admin">
+                <Layout>
+                  <FormulaireGestionnaire />
+                </Layout>
+              </RouteProtegee>
+            }
+          />
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

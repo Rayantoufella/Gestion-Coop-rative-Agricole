@@ -5,11 +5,22 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Représentation JSON d'un dépôt de stock.
+ *
+ * Expose le membre, le produit, la date de dépôt et la quantité déposée,
+ * avec les relations membre et produit lorsqu'elles sont chargées.
+ */
 class DepotStockResource extends JsonResource
 {
     /**
      * Transformer un dépôt de stock en tableau JSON.
      *
+     * La date de dépôt est formatée en `Y-m-d` (null si absente). Les
+     * relations `membre` et `produit` ne sont incluses que si elles ont
+     * été préalablement chargées via `whenLoaded`.
+     *
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

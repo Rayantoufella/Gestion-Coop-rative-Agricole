@@ -11,24 +11,31 @@ class DepotStockSeeder extends Seeder
 {
     public function run(): void
     {
-        // S'assurer qu'il existe des membres et des produits.
-        if (Membre::count() === 0) {
-            Membre::factory()->count(10)->create();
-        }
+        $produits = Produit::pluck('id', 'nom');
+        $membres = Membre::pluck('id', 'code_membre');
 
-        if (Produit::count() === 0) {
-            Produit::factory()->count(10)->create();
-        }
+        $date = static fn (int $mois): string => now()->subMonths($mois)->toDateString();
 
-        $membres = Membre::pluck('id');
-        $produits = Produit::pluck('id');
+        $depots = [
+            ['produit' => "Huile d'olive extra vierge", 'membre' => 'GCA-2025-001', 'date_depot' => $date(6), 'quantite' => 600],
+            ['produit' => "Huile d'olive extra vierge", 'membre' => 'GCA-2025-003', 'date_depot' => $date(3), 'quantite' => 400],
+            ['produit' => 'Dattes Majhoul', 'membre' => 'GCA-2025-002', 'date_depot' => $date(5), 'quantite' => 800],
+            ['produit' => 'Dattes Majhoul', 'membre' => 'GCA-2025-006', 'date_depot' => $date(2), 'quantite' => 500],
+            ['produit' => 'Blé tendre', 'membre' => 'GCA-2025-004', 'date_depot' => $date(5), 'quantite' => 8],
+            ['produit' => 'Blé tendre', 'membre' => 'GCA-2025-007', 'date_depot' => $date(2), 'quantite' => 6],
+            ['produit' => 'Miel de thym', 'membre' => 'GCA-2025-005', 'date_depot' => $date(4), 'quantite' => 150],
+            ['produit' => 'Amandes', 'membre' => 'GCA-2025-008', 'date_depot' => $date(3), 'quantite' => 300],
+        ];
 
-        // Créer 20 dépôts de stock.
-        for ($i = 0; $i < 20; $i++) {
-            DepotStock::factory()->create([
-                'membre_id' => $membres->random(),
-                'produit_id' => $produits->random(),
-            ]);
+        foreach ($depots as $depot) {
+            DepotStock::updateOrCreate(
+                [
+                    'membre_id' => $membres[$depot['membre']],
+                    'produit_id' => $produits[$depot['produit']],
+                    'date_depot' => $depot['date_depot'],
+                ],
+                ['quantite' => $depot['quantite']]
+            );
         }
     }
 }

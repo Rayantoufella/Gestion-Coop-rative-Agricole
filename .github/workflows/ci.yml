@@ -1,0 +1,140 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (Laravel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testing
+          MYSQL_USER: gca_user
+          MYSQL_PASSWORD: gca_2026
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+          --health-start-period=30s
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: gca_user
+      DB_PASSWORD: gca_2026
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_mysql, bcmath, zip
+          coverage: none
+
+      - name: Installer les dépendances Composer
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Préparer l'environnement
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Lancer les tests
+        run: php artisan test
+
+  frontend:
+    name: Frontend (React)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    env:
+      VITE_API_URL: http://localhost:8000/api
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Configurer Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Installer les dépendances npm
+        run: npm ci
+
+      - name: Vérifier le lint
+        run: npm run lint
+
+      - name: Compiler l'application
+        run: npm run build
+
+  docker:
+    name: Docker (compose)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Vérifier la configuration
+        run: docker compose config --quiet
+
+      - name: Construire les images
+        run: docker compose build
+
+      - name: Démarrer l'application
+        run: docker compose up -d --wait --wait-timeout 300
+
+      - name: Tester la connexion à l'API
+        run: |
+          curl --fail --silent --show-error -X POST http://localhost:8001/api/login \
+            -H 'Accept: application/json' -H 'Content-Type: application/json' \
+            -d '{"email":"admin@gca.test","password":"password"}' > /dev/null
+          curl --fail --silent --show-error --retry 30 --retry-delay 3 --retry-all-errors \
+            http://localhost:5174/ > /dev/null
+
+      - name: Lancer les vérifications Postman (Newman)
+        run: npx --yes newman@6 run docs/postman/GCA.postman_collection.json
+
+      - name: Afficher les logs en cas d'échec
+        if: failure()
+        run: docker compose logs
+
+      - name: Arrêter l'application
+        if: always()
+        run: docker compose down -v

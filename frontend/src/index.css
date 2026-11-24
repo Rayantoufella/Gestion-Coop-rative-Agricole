@@ -512,6 +512,20 @@ a {
   background: var(--barre-survol);
 }
 
+/* Section « Paramètres » de la barre latérale (admin) */
+.menu-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--barre-separateur);
+}
+
+.menu-titre {
+  padding: 0 12px 6px;
+  color: var(--barre-texte-doux);
+  font-size: 14px;
+  font-weight: 600;
+}
+
 /* NavLink ajoute la classe "active" sur le lien de la page courante */
 .menu-lien.active {
   background: var(--barre-actif);
@@ -568,6 +582,7 @@ a {
 
   .barre-laterale-texte,
   .menu-lien span,
+  .menu-titre,
   .utilisateur {
     display: none;
   }

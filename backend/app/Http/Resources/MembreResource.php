@@ -5,11 +5,21 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Représentation JSON d'un membre.
+ *
+ * Expose l'identité du membre (code, nom, prénom, téléphone), sa date
+ * d'adhésion et son statut.
+ */
 class MembreResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Transformer un membre en tableau JSON.
      *
+     * La date d'adhésion est formatée en `Y-m-d`. Aucune relation
+     * conditionnelle n'est exposée par cette ressource.
+     *
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

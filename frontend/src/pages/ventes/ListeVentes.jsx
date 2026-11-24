@@ -21,8 +21,8 @@ function formaterNombre(nombre) {
 // Page qui affiche la liste des ventes groupées, page par page.
 function ListeVentes() {
   const { utilisateur } = useContext(AuthContext)
-  // Dans le backend, seul le gestionnaire peut enregistrer ou supprimer une vente.
-  const estGestionnaire = utilisateur.role === 'gestionnaire'
+  // Les deux rôles peuvent enregistrer ou supprimer une vente.
+  const peutGerer = ['admin', 'gestionnaire'].includes(utilisateur.role)
 
   const [ventes, setVentes] = useState([])
   const [page, setPage] = useState(1)
@@ -87,7 +87,7 @@ function ListeVentes() {
           <h1>Ventes groupées</h1>
           <p className="page-intro">Les ventes en gros. Une vente enregistrée ne se modifie pas.</p>
         </div>
-        {estGestionnaire && (
+        {peutGerer && (
           <Link to="/ventes/nouvelle" className="bouton">
             <Icone nom="plus" taille={18} />
             <span>Nouvelle vente</span>
@@ -105,7 +105,7 @@ function ListeVentes() {
         <div className="cadre-tableau">
           {ventes.length === 0 && (
             <ListeVide icone="ventes" message="Aucune vente pour l'instant.">
-              {estGestionnaire && (
+              {peutGerer && (
                 <Link to="/ventes/nouvelle" className="bouton">
                   Nouvelle vente
                 </Link>
@@ -125,7 +125,7 @@ function ListeVentes() {
                       <th className="colonne-nombre">Quantité</th>
                       <th className="colonne-nombre">Prix unitaire</th>
                       <th className="colonne-nombre">Montant</th>
-                      {estGestionnaire && <th className="colonne-actions">Actions</th>}
+                      {peutGerer && <th className="colonne-actions">Actions</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -139,7 +139,7 @@ function ListeVentes() {
                         </td>
                         <td className="colonne-nombre">{formaterNombre(vente.prix_unitaire)} DH</td>
                         <td className="colonne-nombre texte-gras">{formaterNombre(vente.montant_total)} DH</td>
-                        {estGestionnaire && (
+                        {peutGerer && (
                           <td className="colonne-actions">
                             <button
                               type="button"
